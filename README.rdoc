@@ -1,32 +1,35 @@
 = syck
 
-* FIX (url)
+* http://github.com/tenderlove/syck
 
 == DESCRIPTION:
 
-FIX (describe your package)
+A gemified version of Syck from Ruby's stdlib.  Syck has been removed from
+Ruby's stdlib, and this gem is meant to bridge the gap for people that haven't
+updated their YAML yet.
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+* Monkeypatches the crap out of everything
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+  require 'syck'
+  Syck.dump %w{ foo bar baz }
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+* Ruby
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* gem install syck
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2012 Aaron Patterson
+Copyright (c) 2012 Aaron Patterson, why the lucky stiff
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
