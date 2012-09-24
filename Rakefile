@@ -21,6 +21,7 @@ Hoe.spec 'syck' do
 
   self.spec_extras = {
     :extensions            => ["ext/syck/extconf.rb"],
+    :required_ruby_version => '>= 2.0.0'
   }
 
   Rake::ExtensionTask.new "syck", spec do |ext|
