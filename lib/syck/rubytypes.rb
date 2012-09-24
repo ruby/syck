@@ -13,7 +13,7 @@ class Object
     undef to_yaml_properties rescue nil
     def to_yaml_properties; instance_variables.sort; end
 	def to_yaml( opts = {} )
-		YAML::quick_emit( self, opts ) do |out|
+		Syck::quick_emit( self, opts ) do |out|
             out.map( taguri, to_yaml_style ) do |map|
 				to_yaml_properties.each do |m|
                     map.add( m[1..-1], instance_variable_get( m ) )
@@ -33,12 +33,11 @@ class Hash
         elsif Hash === val
             update val
         else
-            raise YAML::TypeError, "Invalid map explicitly tagged #{ tag }: " + val.inspect
+            raise Syck::TypeError, "Invalid map explicitly tagged #{ tag }: " + val.inspect
         end
     end
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( self, opts ) do |out|
+		Syck::quick_emit( self, opts ) do |out|
             out.map( taguri, to_yaml_style ) do |map|
                 each do |k, v|
                     map.add( k, v )
@@ -62,7 +61,7 @@ class Struct
             props = {}
             val.delete_if { |k,v| props[k] = v if k =~ /^@/ }
             begin
-                struct_type = YAML.read_type_class( tag, Struct ).last
+                struct_type = Syck.read_type_class( tag, Struct ).last
             rescue NameError
             end
             if not struct_type
@@ -73,7 +72,7 @@ class Struct
             #
             # Set the Struct properties
             #
-            st = YAML::object_maker( struct_type, {} )
+            st = Syck::object_maker( struct_type, {} )
             st.members.each do |m|
                 st.send( "#{m}=", val[m.to_s] )
             end
@@ -82,12 +81,11 @@ class Struct
             end
             st
         else
-            raise YAML::TypeError, "Invalid Ruby Struct: " + val.inspect
+            raise Syck::TypeError, "Invalid Ruby Struct: " + val.inspect
         end
     end
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( self, opts ) do |out|
+		Syck::quick_emit( self, opts ) do |out|
 			#
 			# Basic struct is passed as a YAML map
 			#
@@ -108,8 +106,7 @@ class Array
     yaml_as "tag:yaml.org,2002:seq"
     def yaml_initialize( tag, val ); concat( val.to_a ); end
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( self, opts ) do |out|
+		Syck::quick_emit( self, opts ) do |out|
             out.seq( taguri, to_yaml_style ) do |seq|
                 each do |x|
                     seq.add( x )
@@ -130,8 +127,7 @@ class Exception
         o
     end
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( self, opts ) do |out|
+		Syck::quick_emit( self, opts ) do |out|
             out.map( taguri, to_yaml_style ) do |map|
                 map.add( 'message', message )
 				to_yaml_properties.each do |m|
@@ -164,12 +160,11 @@ class String
             val.each { |k,v| s.instance_variable_set( k, v ) }
             s
         else
-            raise YAML::TypeError, "Invalid String: " + val.inspect
+            raise Syck::TypeError, "Invalid String: " + val.inspect
         end
     end
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( is_complex_yaml? ? self : nil, opts ) do |out|
+		Syck::quick_emit( is_complex_yaml? ? self : nil, opts ) do |out|
             if is_binary_data?
                 out.scalar( "tag:yaml.org,2002:binary", [self].pack("m"), :literal )
             elsif to_yaml_properties.empty?
@@ -191,15 +186,14 @@ class Symbol
     yaml_as "tag:ruby.yaml.org,2002:sym"
     def Symbol.yaml_new( klass, tag, val )
         if String === val
-            val = YAML::load( val ) if val =~ /\A(["']).*\1\z/
+            val = Syck::load( val ) if val =~ /\A(["']).*\1\z/
             val.intern
         else
-            raise YAML::TypeError, "Invalid Symbol: " + val.inspect
+            raise Syck::TypeError, "Invalid Symbol: " + val.inspect
         end
     end
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( nil, opts ) do |out|
+		Syck::quick_emit( nil, opts ) do |out|
             out.scalar( "tag:yaml.org,2002:str", self.inspect, :plain )
         end
 	end
@@ -213,8 +207,8 @@ class Range
         if String === val and val =~ /^#{inr}(\.{2,3})#{inr}$/o
             r1, rdots, r2 = $1, $2, $3
             opts = {
-                'begin' => YAML.load( "--- #{r1}" ),
-                'end' => YAML.load( "--- #{r2}" ),
+                'begin' => Syck.load( "--- #{r1}" ),
+                'end' => Syck.load( "--- #{r2}" ),
                 'excl' => rdots.length == 3
             }
             val = {}
@@ -224,7 +218,7 @@ class Range
             opts['excl'] = val.delete('excl')
         end
         if Hash === opts
-            r = YAML::object_maker( klass, {} )
+            r = Syck::object_maker( klass, {} )
             # Thank you, NaHi
             Range.instance_method(:initialize).
                   bind(r).
@@ -232,12 +226,11 @@ class Range
             val.each { |k,v| r.instance_variable_set( k, v ) }
             r
         else
-            raise YAML::TypeError, "Invalid Range: " + val.inspect
+            raise Syck::TypeError, "Invalid Range: " + val.inspect
         end
     end
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( self, opts ) do |out|
+		Syck::quick_emit( self, opts ) do |out|
             # if self.begin.is_complex_yaml? or self.begin.respond_to? :to_str or
             #   self.end.is_complex_yaml? or self.end.respond_to? :to_str or
             #   not to_yaml_properties.empty?
@@ -276,19 +269,18 @@ class Regexp
                 mods |= Regexp::NOENCODING if val['mods'].include?( 'n' )
             end
             val.delete( 'mods' )
-            r = YAML::object_maker( klass, {} )
+            r = Syck::object_maker( klass, {} )
             Regexp.instance_method(:initialize).
                   bind(r).
                   call( val.delete( 'regexp' ), mods )
             val.each { |k,v| r.instance_variable_set( k, v ) }
             r
         else
-            raise YAML::TypeError, "Invalid Regular expression: " + val.inspect
+            raise Syck::TypeError, "Invalid Regular expression: " + val.inspect
         end
     end
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( nil, opts ) do |out|
+		Syck::quick_emit( nil, opts ) do |out|
             if to_yaml_properties.empty?
                 out.scalar( taguri, self.inspect, :plain )
             else
@@ -298,7 +290,7 @@ class Regexp
                         map.add( 'regexp', $1 )
                         map.add( 'mods', $2 )
                     else
-		                raise YAML::TypeError, "Invalid Regular expression: " + src
+		                raise Syck::TypeError, "Invalid Regular expression: " + src
                     end
                     to_yaml_properties.each do |m|
                         map.add( m, instance_variable_get( m ) )
@@ -318,12 +310,11 @@ class Time
             val.each { |k,v| t.instance_variable_set( k, v ) }
             t
         else
-            raise YAML::TypeError, "Invalid Time: " + val.inspect
+            raise Syck::TypeError, "Invalid Time: " + val.inspect
         end
     end
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( self, opts ) do |out|
+		Syck::quick_emit( self, opts ) do |out|
             tz = "Z"
             # from the tidy Tobias Peters <t-peters@gmx.de> Thanks!
             unless self.utc?
@@ -360,8 +351,7 @@ end
 class Date
     yaml_as "tag:yaml.org,2002:timestamp#ymd"
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( self, opts ) do |out|
+		Syck::quick_emit( self, opts ) do |out|
             out.scalar( "tag:yaml.org,2002:timestamp", self.to_s, :plain )
         end
 	end
@@ -370,8 +360,7 @@ end
 class Integer
     yaml_as "tag:yaml.org,2002:int"
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( nil, opts ) do |out|
+		Syck::quick_emit( nil, opts ) do |out|
             out.scalar( "tag:yaml.org,2002:int", self.to_s, :plain )
         end
 	end
@@ -380,8 +369,7 @@ end
 class Float
     yaml_as "tag:yaml.org,2002:float"
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( nil, opts ) do |out|
+		Syck::quick_emit( nil, opts ) do |out|
             str = self.to_s
             if str == "Infinity"
                 str = ".Inf"
@@ -405,8 +393,7 @@ class Rational
 		end
 	end
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( self, opts ) do |out|
+		Syck::quick_emit( self, opts ) do |out|
 			out.map( taguri, nil ) do |map|
 				map.add( 'denominator', denominator )
 				map.add( 'numerator', numerator )
@@ -425,8 +412,7 @@ class Complex
 		end
 	end
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( self, opts ) do |out|
+		Syck::quick_emit( self, opts ) do |out|
 			out.map( taguri, nil ) do |map|
 				map.add( 'image', imaginary )
 				map.add( 'real', real )
@@ -438,8 +424,7 @@ end
 class TrueClass
     yaml_as "tag:yaml.org,2002:bool#yes"
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( nil, opts ) do |out|
+		Syck::quick_emit( nil, opts ) do |out|
             out.scalar( taguri, "true", :plain )
         end
 	end
@@ -448,8 +433,7 @@ end
 class FalseClass
     yaml_as "tag:yaml.org,2002:bool#no"
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( nil, opts ) do |out|
+		Syck::quick_emit( nil, opts ) do |out|
             out.scalar( taguri, "false", :plain )
         end
 	end
@@ -458,8 +442,7 @@ end
 class NilClass
     yaml_as "tag:yaml.org,2002:null"
 	def to_yaml( opts = {} )
-        return super unless YAML::ENGINE.syck?
-		YAML::quick_emit( nil, opts ) do |out|
+		Syck::quick_emit( nil, opts ) do |out|
             out.scalar( taguri, "", :plain )
         end
 	end

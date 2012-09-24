@@ -1,5 +1,4 @@
-require 'test/unit'
-require 'yaml'
+require 'helper'
 
 module Syck
   class TestException < Test::Unit::TestCase
@@ -17,14 +16,14 @@ module Syck
     end
 
     def test_to_yaml
-      w = YAML.load(@wups.to_yaml)
+      w = Syck.load(Syck.dump(@wups))
       assert_equal @wups, w
       assert_equal 1, w.foo
       assert_equal 2, w.bar
     end
 
     def test_dump
-      w = YAML.load(@wups.to_yaml)
+      w = Syck.load(Syck.dump(@wups))
       assert_equal @wups, w
       assert_equal 1, w.foo
       assert_equal 2, w.bar
@@ -37,7 +36,7 @@ module Syck
         end
       end
 
-      w = YAML.load(YAML.dump(@wups))
+      w = Syck.load(Syck.dump(@wups))
       assert_equal @wups, w
       assert_equal 1, w.foo
       assert_nil w.bar

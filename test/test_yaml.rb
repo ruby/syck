@@ -2,9 +2,7 @@
 #												vim:sw=4:ts=4
 # $Id$
 #
-require 'test/unit'
-require 'syck'
-require 'yaml'
+require 'helper'
 require 'syck/ypath'
 
 # [ruby-core:01946]
@@ -14,15 +12,6 @@ end
 
 module Syck
 class YAML_Unit_Tests < Test::Unit::TestCase
-    def setup
-        @current_engine = YAML::ENGINE.yamler
-        YAML::ENGINE.yamler = 'syck'
-    end
-
-    def teardown
-        YAML::ENGINE.yamler = @current_engine
-    end
-
     # [ruby-core:34969]
     def test_regexp_with_n
         assert_cycle(Regexp.new('',0,'n'))
@@ -33,11 +22,11 @@ class YAML_Unit_Tests < Test::Unit::TestCase
 	# emitting
 	#
 	def assert_to_yaml( obj, yaml, msg = nil )
-		assert_equal( obj, YAML::load( yaml ), msg )
-		assert_equal( obj, YAML::parse( yaml ).transform, msg )
-        assert_equal( obj, YAML::load( obj.to_yaml ), msg )
-		assert_equal( obj, YAML::parse( obj.to_yaml ).transform, msg )
-        assert_equal( obj, YAML::load(
+		assert_equal( obj, Syck::load( yaml ), msg )
+		assert_equal( obj, Syck::parse( yaml ).transform, msg )
+        assert_equal( obj, Syck::load( obj.to_yaml ), msg )
+		assert_equal( obj, Syck::parse( obj.to_yaml ).transform, msg )
+        assert_equal( obj, Syck::load(
 			obj.to_yaml( :UseVersion => true, :UseHeader => true, :SortKeys => true )
 		), msg )
 	end
@@ -46,16 +35,16 @@ class YAML_Unit_Tests < Test::Unit::TestCase
 	# Test parser only
 	#
 	def assert_parse_only( obj, yaml, msg = nil )
-		assert_equal( obj, YAML::load( yaml ), msg )
-		assert_equal( obj, YAML::parse( yaml ).transform, msg )
+		assert_equal( obj, Syck::load( yaml ), msg )
+		assert_equal( obj, Syck::parse( yaml ).transform, msg )
 	end
 
     def assert_cycle( obj, msg = nil )
-        assert_equal( obj, YAML::load( obj.to_yaml ), msg )
+        assert_equal( obj, Syck::load( obj.to_yaml ), msg )
     end
 
     def assert_path_segments( path, segments, msg = nil )
-        YAML::YPath.each_path( path ) { |choice|
+        Syck::YPath.each_path( path ) { |choice|
             assert_equal( choice.segments, segments.shift, msg )
         }
         assert_equal( segments.length, 0, "Some segments leftover: #{ segments.inspect }" )
@@ -566,7 +555,7 @@ exponential: 12.3015e+02
 fixed: 1,230.15
 negative infinity: -.inf
 EOY
-		nan = YAML::load( <<EOY )
+		nan = Syck::load( <<EOY )
 not a number: .NaN
 EOY
 		assert( nan['not a number'].nan? )
@@ -632,7 +621,7 @@ EOY
 
 	def test_spec_log_file
 		doc_ct = 0
-		YAML::load_documents( <<EOY
+		Syck::load_documents( <<EOY
 ---
 Time: 2001-11-23 15:01:42 -05:00
 User: ed
@@ -681,7 +670,7 @@ EOY
 	end
 
 	def test_spec_root_fold
-		y = YAML::load( <<EOY
+		y = Syck::load( <<EOY
 --- >
 This YAML stream contains a single text value.
 The next stream is a log file - a sequence of
@@ -693,7 +682,7 @@ EOY
 	end
 
 	def test_spec_root_mapping
-		y = YAML::load( <<EOY
+		y = Syck::load( <<EOY
 # This stream is an example of a top-level mapping.
 invoice : 34843
 date    : 2001-01-23
@@ -705,7 +694,7 @@ EOY
 
 	def test_spec_oneline_docs
 		doc_ct = 0
-		YAML::load_documents( <<EOY
+		Syck::load_documents( <<EOY
 # The following is a sequence of three documents.
 # The first contains an empty mapping, the second
 # an empty sequence, and the last an empty string.
@@ -737,8 +726,8 @@ EOY
                 raise ArgumentError, "Not a Hash in domain.tld,2002/invoice: " + val.inspect
             end
         }
-        YAML.add_domain_type( "domain.tld,2002", 'invoice', &customer_proc )
-        YAML.add_domain_type( "domain.tld,2002", 'customer', &customer_proc )
+        Syck.add_domain_type( "domain.tld,2002", 'invoice', &customer_proc )
+        Syck.add_domain_type( "domain.tld,2002", 'customer', &customer_proc )
 		assert_parse_only( { "invoice"=> { "customers"=> [ { "given"=>"Chris", "type"=>"domain customer", "family"=>"Dumars" } ], "type"=>"domain invoice" } }, <<EOY
 # 'http://domain.tld,2002/invoice' is some type family.
 invoice: !domain.tld,2002/^invoice
@@ -785,7 +774,7 @@ EOY
 
 	def test_spec_private_types
 		doc_ct = 0
-		YAML::parse_documents( <<EOY
+		Syck::parse_documents( <<EOY
 # Private types are per-document.
 ---
 pool: !!ball
@@ -810,10 +799,10 @@ EOY
 	end
 
 	def test_spec_url_escaping
-		YAML.add_domain_type( "domain.tld,2002", "type0" ) { |type, val|
+		Syck.add_domain_type( "domain.tld,2002", "type0" ) { |type, val|
 			"ONE: #{val}"
 		}
-		YAML.add_domain_type( "domain.tld,2002", "type%30" ) { |type, val|
+		Syck.add_domain_type( "domain.tld,2002", "type%30" ) { |type, val|
 			"TWO: #{val}"
 		}
 		assert_parse_only(
@@ -842,7 +831,7 @@ EOY
 	end
 
 	def test_spec_explicit_families
-        YAML.add_domain_type( "somewhere.com,2002", 'type' ) { |type, val|
+        Syck.add_domain_type( "somewhere.com,2002", 'type' ) { |type, val|
             "SOMEWHERE: #{val}"
         }
 		assert_parse_only(
@@ -863,7 +852,7 @@ EOY
 
 	def test_spec_application_family
 		# Testing the clarkevans.com graphs
-		YAML.add_domain_type( "clarkevans.com,2002", 'graph/shape' ) { |type, val|
+		Syck.add_domain_type( "clarkevans.com,2002", 'graph/shape' ) { |type, val|
 			if Array === val
 				val << "Shape Container"
 				val
@@ -880,9 +869,9 @@ EOY
 				raise ArgumentError, "Invalid graph of type #{val.class}: " + val.inspect
 			end
 		}
-		YAML.add_domain_type( "clarkevans.com,2002", 'graph/circle', &one_shape_proc )
-		YAML.add_domain_type( "clarkevans.com,2002", 'graph/line', &one_shape_proc )
-		YAML.add_domain_type( "clarkevans.com,2002", 'graph/text', &one_shape_proc )
+		Syck.add_domain_type( "clarkevans.com,2002", 'graph/circle', &one_shape_proc )
+		Syck.add_domain_type( "clarkevans.com,2002", 'graph/line', &one_shape_proc )
+		Syck.add_domain_type( "clarkevans.com,2002", 'graph/text', &one_shape_proc )
 		assert_parse_only(
 			[[{"radius"=>7, "center"=>{"x"=>73, "y"=>129}, "TYPE"=>"Shape: graph/circle"}, {"finish"=>{"x"=>89, "y"=>102}, "TYPE"=>"Shape: graph/line", "start"=>{"x"=>73, "y"=>129}}, {"TYPE"=>"Shape: graph/text", "value"=>"Pretty vector drawing.", "start"=>{"x"=>73, "y"=>129}, "color"=>16772795}, "Shape Container"]], <<EOY
 - !clarkevans.com,2002/graph/^shape
@@ -1212,7 +1201,7 @@ EOY
 
 		# Read YAML dumped by the ruby 1.8.3.
 		assert_to_yaml( Rational(1, 2), "!ruby/object:Rational 1/2\n" )
-		assert_raise( ArgumentError ) { YAML.load("!ruby/object:Rational INVALID/RATIONAL\n") }
+		assert_raise( ArgumentError ) { Syck.load("!ruby/object:Rational INVALID/RATIONAL\n") }
 	end
 
 	def test_ruby_complex
@@ -1224,7 +1213,7 @@ EOY
 
 		# Read YAML dumped by the ruby 1.8.3.
 		assert_to_yaml( Complex(3, 4), "!ruby/object:Complex 3+4i\n" )
-		assert_raise( ArgumentError ) { YAML.load("!ruby/object:Complex INVALID+COMPLEXi\n") }
+		assert_raise( ArgumentError ) { Syck.load("!ruby/object:Complex INVALID+COMPLEXi\n") }
 	end
 
 	def test_emitting_indicators
@@ -1238,7 +1227,7 @@ EOY
 	# Test the YAML::Stream class -- INACTIVE at the moment
 	#
 	def test_document
-		y = YAML::Stream.new( :Indent => 2, :UseVersion => 0 )
+		y = Syck::Stream.new( :Indent => 2, :UseVersion => 0 )
 		y.add(
 			{ 'hi' => 'hello', 'map' =>
 				{ 'good' => 'two' },
@@ -1344,7 +1333,7 @@ EOY
     def test_circular_references
         a = []; a[0] = a; a[1] = a
         inspect_str = "[[...], [...]]"
-        assert_equal( inspect_str, YAML::load( a.to_yaml ).inspect )
+        assert_equal( inspect_str, Syck::load( a.to_yaml ).inspect )
     end
 
     #
@@ -1381,14 +1370,14 @@ EOY
       #
       # empty seq as key
       #
-      o = YAML.load({[]=>""}.to_yaml)
+      o = Syck.load({[]=>""}.to_yaml)
       assert_equal(Hash, o.class)
       assert_equal([[]], o.keys)
 
       #
       # empty map as key
       #
-      o = YAML.load({{}=>""}.to_yaml)
+      o = Syck.load({{}=>""}.to_yaml)
       assert_equal(Hash, o.class)
       assert_equal([{}], o.keys)
     end
@@ -1397,17 +1386,17 @@ EOY
     # contributed by riley lynch [ruby-Bugs-8548]
     #
     def test_object_id_collision
-      omap = YAML::Omap.new
+      omap = Syck::Omap.new
       1000.times { |i| omap["key_#{i}"] = { "value" => i } }
       raise "id collision in ordered map" if omap.to_yaml =~ /id\d+/
     end
 
     def test_date_out_of_range
-      assert_nothing_raised{YAML::load('1900-01-01T00:00:00+00:00')}
+      assert_nothing_raised{Syck::load('1900-01-01T00:00:00+00:00')}
     end
 
     def test_normal_exit
-      YAML.load("2000-01-01 00:00:00.#{"0"*1000} +00:00\n")
+      Syck.load("2000-01-01 00:00:00.#{"0"*1000} +00:00\n")
       # '[ruby-core:13735]'
     end
 end

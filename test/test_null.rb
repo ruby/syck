@@ -1,5 +1,4 @@
-require 'test/unit'
-require 'yaml'
+require 'helper'
 
 module Syck
   ###
@@ -7,7 +6,7 @@ module Syck
   # http://yaml.org/type/null.html
   class TestNull < Test::Unit::TestCase
     def test_null_list
-      assert_equal [nil] * 5, YAML.load(<<-eoyml)
+      assert_equal [nil] * 5, Syck.load(<<-eoyml)
 ---
 - ~
 - null

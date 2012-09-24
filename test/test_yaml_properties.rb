@@ -1,5 +1,4 @@
-require 'test/unit'
-require 'yaml'
+require 'helper'
 
 module Syck
   class TestYamlProperties < Test::Unit::TestCase
@@ -17,7 +16,7 @@ module Syck
     end
 
     def test_object_dump_yaml_properties
-      foo = YAML.load(YAML.dump(Foo.new))
+      foo = Syck.load(Syck.dump(Foo.new))
       assert_equal 1, foo.a
       assert_equal 2, foo.b
       assert_nil foo.c
@@ -36,7 +35,7 @@ module Syck
     end
 
     def test_struct_dump_yaml_properties
-      bar = YAML.load(YAML.dump(Bar.new('a', 'b')))
+      bar = Syck.load(Syck.dump(Bar.new('a', 'b')))
       assert_equal 'a', bar.foo
       assert_equal 'b', bar.bar
       assert_nil bar.baz
@@ -51,12 +50,12 @@ module Syck
       end
 
       string.instance_variable_set(:@tastes, 'delicious')
-      v = YAML.load YAML.dump string
+      v = Syck.load Syck.dump string
       assert_equal 'delicious', v.instance_variable_get(:@tastes)
     end
 
     def test_string_load
-      str = YAML.load("--- !str \nstr: okonomiyaki\n:@tastes: delicious\n")
+      str = Syck.load("--- !str \nstr: okonomiyaki\n:@tastes: delicious\n")
       assert_equal 'okonomiyaki', str
       assert_equal 'delicious', str.instance_variable_get(:@tastes)
     end

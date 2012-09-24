@@ -436,9 +436,9 @@ module Kernel
     def y( object, *objects )
         objects.unshift object
         puts( if objects.length == 1
-                  YAML.dump( *objects )
+                  Syck.dump( *objects )
               else
-                  YAML.dump_stream( *objects )
+                  Syck.dump_stream( *objects )
               end )
     end
     private :y

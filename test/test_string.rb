@@ -1,27 +1,26 @@
-require 'test/unit'
-require 'yaml'
+require 'helper'
 
 module Syck
   class TestString < Test::Unit::TestCase
     def test_binary_string_null
       string = "\x00"
-      yml = YAML.dump string
+      yml = Syck.dump string
       assert_match(/binary/, yml)
-      assert_equal string, YAML.load(yml)
+      assert_equal string, Syck.load(yml)
     end
 
     def test_binary_string
       string = binary_string
-      yml = YAML.dump string
+      yml = Syck.dump string
       assert_match(/binary/, yml)
-      assert_equal string, YAML.load(yml)
+      assert_equal string, Syck.load(yml)
     end
 
     def test_non_binary_string
       string = binary_string(0.29)
-      yml = YAML.dump string
+      yml = Syck.dump string
       assert_not_match(/binary/, yml)
-      assert_equal string, YAML.load(yml)
+      assert_equal string, Syck.load(yml)
     end
 
     def test_string_with_ivars
@@ -29,7 +28,7 @@ module Syck
       ivar = "on rock and roll"
       food.instance_variable_set(:@we_built_this_city, ivar)
 
-      str = YAML.load YAML.dump food
+      str = Syck.load Syck.dump food
       assert_equal ivar, food.instance_variable_get(:@we_built_this_city)
     end
 

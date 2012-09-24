@@ -1,5 +1,4 @@
-require 'test/unit'
-require 'yaml'
+require 'helper'
 
 module Syck
   class TestHash < Test::Unit::TestCase
@@ -7,16 +6,12 @@ module Syck
       @hash = { :a => 'b' }
     end
 
-    def test_to_yaml
-      assert_equal @hash, YAML.load(@hash.to_yaml)
-    end
-
     def test_dump
-      assert_equal @hash, YAML.load(YAML.dump(@hash))
+      assert_equal @hash, Syck.load(Syck.dump(@hash))
     end
 
     def test_ref_append
-      hash = YAML.load(<<-eoyml)
+      hash = Syck.load(<<-eoyml)
 ---
 foo: &foo
   hello: world

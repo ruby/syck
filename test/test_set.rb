@@ -1,10 +1,9 @@
-require 'test/unit'
-require 'yaml'
+require 'helper'
 
 module Syck
   class TestSet < Test::Unit::TestCase
     def setup
-      @set = YAML::Set.new
+      @set = Syck::Set.new
       @set['foo'] = 'bar'
       @set['bar'] = 'baz'
     end
@@ -14,13 +13,13 @@ module Syck
     end
 
     def test_roundtrip
-      assert_equal(@set, YAML.load(YAML.dump(@set)))
+      assert_equal(@set, Syck.load(Syck.dump(@set)))
     end
 
     ###
     # FIXME: Syck should also support !!set as shorthand
     def test_load_from_yaml
-      loaded = YAML.load(<<-eoyml)
+      loaded = Syck.load(<<-eoyml)
 --- !set
 foo: bar
 bar: baz
