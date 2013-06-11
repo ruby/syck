@@ -7,6 +7,7 @@
 #
 
 require 'yaml/syck'
+require File.expand_path('../yaml/engine_manager', __FILE__)
 
 # == YAML
 #
