@@ -3,7 +3,7 @@
 require 'time'
 Gem::Specification.new do |s|
   s.name = "syck"
-  s.version = "1.0.1"
+  s.version = "1.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Aaron Patterson", "Mat Brown"]
@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.extensions = ["ext/syck/extconf.rb"]
   s.extra_rdoc_files = ["CHANGELOG.rdoc", "Manifest.txt", "README.rdoc", "CHANGELOG.rdoc", "README.rdoc"]
   s.files = Dir["[A-Z]*", "ext/**/*", "lib/**/*.rb", "test/**/*.rb"]
-  s.homepage = "http://github.com/tenderlove/syck"
+  s.homepage = "https://github.com/RapGenius/syck"
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.required_ruby_version = Gem::Requirement.new(">= 2.0.0")
