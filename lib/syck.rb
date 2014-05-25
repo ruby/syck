@@ -444,4 +444,4 @@ module Kernel
     private :y
 end
 
-
+YAML = Syck if defined?(YAML)
