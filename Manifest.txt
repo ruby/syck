@@ -34,8 +34,8 @@ lib/syck/tag.rb
 lib/syck/types.rb
 lib/syck/yamlnode.rb
 lib/syck/ypath.rb
+lib/yaml/engine_manager.rb
 lib/yaml/syck.rb
-test/helper.rb
 test/test_array.rb
 test/test_boolean.rb
 test/test_class.rb
