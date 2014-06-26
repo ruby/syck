@@ -28,7 +28,7 @@ typedef struct RVALUE {
     /*struct RString string;*/
     struct RArray  array;
     /*struct RRegexp regexp;*/
-    struct RHash   hash;
+    /*struct RHash   hash;*/
     /*struct RData   data;*/
     struct RStruct rstruct;
     /*struct RBignum bignum;*/
