@@ -9,7 +9,7 @@ class StructWithIvar < Struct.new(:foo)
 end
 
 module Syck
-  class TestStruct < MiniTest::Unit::TestCase
+  class TestStruct < Test::Unit::TestCase
     def test_roundtrip
       thing = StructWithIvar.new('bar')
       struct = Syck.load(Syck.dump(thing))
