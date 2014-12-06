@@ -4,7 +4,6 @@ require 'rubygems'
 require 'hoe'
 
 Hoe.plugins.delete :rubyforge
-Hoe.plugin :minitest
 Hoe.plugin :gemspec # `gem install hoe-gemspec`
 Hoe.plugin :git     # `gem install hoe-git`
 
