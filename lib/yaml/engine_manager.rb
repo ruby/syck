@@ -45,7 +45,7 @@ module YAML
   ##
   # Allows changing the current YAML engine.  See YAML for details.
 
-  remove_const :ENGINE
+  remove_const :ENGINE if defined? ENGINE
   ENGINE = YAML::EngineManager.new
 end
 
