@@ -18,7 +18,6 @@ ext/syck/syck.h
 ext/syck/token.c
 ext/syck/yaml2byte.c
 ext/syck/yamlbyte.h
-lib/syck.bundle
 lib/syck.rb
 lib/syck/baseemitter.rb
 lib/syck/basenode.rb
