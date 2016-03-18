@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.extensions = ["ext/syck/extconf.rb"]
   s.extra_rdoc_files = ["CHANGELOG.rdoc", "Manifest.txt", "README.rdoc", "CHANGELOG.rdoc", "README.rdoc"]
   s.files = Dir["[A-Z]*", "ext/**/*", "lib/**/*.rb", "test/**/*.rb"]
-  s.homepage = "https://github.com/RapGenius/syck"
+  s.homepage = "https://github.com/tenderlove/syck"
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.required_ruby_version = Gem::Requirement.new(">= 2.0.0")
