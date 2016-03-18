@@ -5,9 +5,9 @@ Gem::Specification.new do |s|
   s.version = "1.0.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Aaron Patterson", "Mat Brown"]
+  s.authors = ["Hiroshi SHIBATA", "Aaron Patterson", "Mat Brown"]
+  s.email = ["hsbt@ruby-lang.org", "aaron@tenderlovemaking.com"]
   s.description = "A gemified version of Syck from Ruby's stdlib.  Syck has been removed from\nRuby's stdlib, and this gem is meant to bridge the gap for people that haven't\nupdated their YAML yet."
-  s.email = ["aaron@tenderlovemaking.com"]
   s.extensions = ["ext/syck/extconf.rb"]
   s.extra_rdoc_files = ["CHANGELOG.rdoc", "Manifest.txt", "README.rdoc", "CHANGELOG.rdoc", "README.rdoc"]
   s.files = Dir["[A-Z]*", "ext/**/*", "lib/**/*.rb", "test/**/*.rb"]
