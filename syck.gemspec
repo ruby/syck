@@ -1,6 +1,5 @@
 # -*- encoding: utf-8 -*-
 
-require 'time'
 Gem::Specification.new do |s|
   s.name = "syck"
   s.version = "1.0.5"
