@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.required_ruby_version = Gem::Requirement.new(">= 2.0.0")
-  s.rubyforge_project = "syck"
   s.rubygems_version = "2.0.3"
   s.summary = "A gemified version of Syck from Ruby's stdlib"
   s.test_files = Dir["test/**/*.rb"]
