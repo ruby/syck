@@ -4,20 +4,20 @@ Gem::Specification.new do |s|
   s.name = "syck"
   s.version = "1.0.5"
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.summary = "A gemified version of Syck from Ruby's stdlib"
+  s.description = "A gemified version of Syck from Ruby's stdlib.  Syck has been removed from\nRuby's stdlib, and this gem is meant to bridge the gap for people that haven't\nupdated their YAML yet."
   s.authors = ["Hiroshi SHIBATA", "Aaron Patterson", "Mat Brown"]
   s.email = ["hsbt@ruby-lang.org", "aaron@tenderlovemaking.com"]
-  s.description = "A gemified version of Syck from Ruby's stdlib.  Syck has been removed from\nRuby's stdlib, and this gem is meant to bridge the gap for people that haven't\nupdated their YAML yet."
-  s.extensions = ["ext/syck/extconf.rb"]
-  s.extra_rdoc_files = ["CHANGELOG.rdoc", "Manifest.txt", "README.rdoc", "CHANGELOG.rdoc", "README.rdoc"]
-  s.files = Dir["[A-Z]*", "ext/**/*", "lib/**/*.rb", "test/**/*.rb"]
   s.homepage = "https://github.com/tenderlove/syck"
-  s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
-  s.required_ruby_version = Gem::Requirement.new(">= 2.0.0")
-  s.rubygems_version = "2.0.3"
-  s.summary = "A gemified version of Syck from Ruby's stdlib"
+  s.extensions = ["ext/syck/extconf.rb"]
+  s.files = Dir["[A-Z]*", "ext/**/*", "lib/**/*.rb", "test/**/*.rb"]
+  s.extra_rdoc_files = ["CHANGELOG.rdoc", "Manifest.txt", "README.rdoc", "CHANGELOG.rdoc", "README.rdoc"]
   s.test_files = Dir["test/**/*.rb"]
+  s.rdoc_options = ["--main", "README.rdoc"]
+  s.required_ruby_version = Gem::Requirement.new(">= 2.0.0")
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.rubygems_version = "2.0.3"
 
   s.add_development_dependency(%q<bundler>, ["~> 1.11"])
   s.add_development_dependency(%q<rdoc>, ["~> 4.0"])
