@@ -1,3 +1,4 @@
+# encoding: ASCII-8BIT
 # -*- mode: ruby; ruby-indent-level: 4; tab-width: 4; indent-tabs-mode: t -*-
 #												vim:sw=4:ts=4
 # $Id$
