@@ -21,5 +21,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency(%q<bundler>, ["~> 1.11"])
   s.add_development_dependency(%q<rdoc>, ["~> 4.0"])
+  s.add_development_dependency(%q<test-unit>, ["~> 3.1"])
   s.add_development_dependency(%q<rake-compiler>, [">= 0.4.1"])
 end
