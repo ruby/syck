@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
   s.summary = "A gemified version of Syck from Ruby's stdlib"
   s.test_files = Dir["test/**/*.rb"]
 
-  s.add_dependency(%q<rdoc>, ["~> 4.0"])
-  s.add_dependency(%q<rake-compiler>, [">= 0.4.1"])
+  s.add_development_dependency(%q<rdoc>, ["~> 4.0"])
+  s.add_development_dependency(%q<rake-compiler>, [">= 0.4.1"])
 end
