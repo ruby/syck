@@ -1,6 +1,19 @@
+=== 1.1.0 / 2016-03-22
+
+Bug fixes:
+
+ * Fix broken tests with Ruby 2.0.0 or later.
+
+Enhancements:
+
+ * Skipped Syck specific methods on Psych engine. 
+
+Known issues:
+
+ * Can't switch back to Psych.
+
 === 1.0.0 / 2012-09-24
 
 * 1 major enhancement
 
   * Birthday!
-
