@@ -2,7 +2,7 @@ require 'bundler/gem_tasks'
 require 'rake/extensiontask'
 require 'rake/testtask'
 
-CLEAN = Rake::FileList["lib/syck.bundle", "tmp"]
+CLEAN << "lib/syck.bundle" << "tmp"
 
 Rake::TestTask.new(:test) do |t|
   t.libs << "test"
