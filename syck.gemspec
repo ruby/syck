@@ -9,6 +9,7 @@ Gem::Specification.new do |s|
   s.authors = ["Hiroshi SHIBATA", "Aaron Patterson", "Mat Brown"]
   s.email = ["hsbt@ruby-lang.org", "aaron@tenderlovemaking.com"]
   s.homepage = "https://github.com/tenderlove/syck"
+  s.license = "MIT"
   s.require_paths = ["lib"]
   s.extensions = ["ext/syck/extconf.rb"]
   s.files = Dir["[A-Z]*", "ext/**/*", "lib/**/*.rb", "test/**/*.rb"]
