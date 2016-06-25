@@ -1162,7 +1162,11 @@ syck_resolver_transfer(VALUE self, VALUE type, VALUE val)
             }
             else if ( !NIL_P( target_class ) )
             {
+#ifdef RUBY_INTEGER_UNIFICATION
+                if ( subclass == rb_cInteger )
+#else
                 if ( subclass == rb_cBignum )
+#endif
                 {
                     obj = rb_str2inum( val, 10 ); /* for yaml dumped by 1.8.3 [ruby-core:6159] */
                 }
@@ -2325,4 +2329,3 @@ Init_syck()
     rb_define_method( cEmitter, "set_resolver", syck_emitter_set_resolver, 1);
     rb_define_method( cEmitter, "node_export", syck_emitter_node_export, 1);
 }
-
