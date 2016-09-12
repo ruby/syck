@@ -1,6 +1,6 @@
 = syck
 
-* http://github.com/tenderlove/syck
+* https://github.com/ruby/syck
 
 == DESCRIPTION:
 
