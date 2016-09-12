@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.description = "A gemified version of Syck from Ruby's stdlib.  Syck has been removed from\nRuby's stdlib, and this gem is meant to bridge the gap for people that haven't\nupdated their YAML yet."
   s.authors = ["Hiroshi SHIBATA", "Aaron Patterson", "Mat Brown"]
   s.email = ["hsbt@ruby-lang.org", "aaron@tenderlovemaking.com"]
-  s.homepage = "https://github.com/tenderlove/syck"
+  s.homepage = "https://github.com/ruby/syck"
   s.license = "MIT"
   s.require_paths = ["lib"]
   s.extensions = ["ext/syck/extconf.rb"]
