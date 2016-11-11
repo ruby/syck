@@ -30,7 +30,7 @@ typedef struct RVALUE {
     /*struct RRegexp regexp;*/
     /*struct RHash   hash;*/
     /*struct RData   data;*/
-    struct RStruct rstruct;
+    /*struct RStruct rstruct;*/
     /*struct RBignum bignum;*/
     /*struct RFile   file;*/
     } as;
