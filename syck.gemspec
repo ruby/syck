@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0.9.5")
   s.rubygems_version = "2.0.3"
 
-  s.add_development_dependency(%q<bundler>, ["~> 1.11"])
-  s.add_development_dependency(%q<test-unit>, ["~> 3.1"])
-  s.add_development_dependency(%q<rake-compiler>, [">= 0.4.1"])
+  s.add_development_dependency(%q<bundler>)
+  s.add_development_dependency(%q<test-unit>)
+  s.add_development_dependency(%q<rake-compiler>)
 end
