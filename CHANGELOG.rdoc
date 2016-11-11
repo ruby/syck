@@ -1,3 +1,9 @@
+=== 1.2.0 / 2016-11-12
+
+Bug fixes:
+
+ * Fix build error with Ruby 2.4.0
+
 === 1.1.0 / 2016-03-22
 
 Bug fixes:
@@ -6,7 +12,7 @@ Bug fixes:
 
 Enhancements:
 
- * Skipped Syck specific methods on Psych engine. 
+ * Skipped Syck specific methods on Psych engine.
 
 Known issues:
 
