@@ -1050,7 +1050,7 @@ void syck_emit_item( SyckEmitter *e, st_data_t n )
         {
             SyckLevel *parent = syck_emitter_parent_level( e );
 
-            /* seq-in-map shortcut -- the lvl->anctag check should be unneccesary but
+            /* seq-in-map shortcut -- the lvl->anctag check should be unnecessary but
              * there is a nasty shift/reduce in the parser on this point and
              * i'm not ready to tickle it. */
             if ( lvl->anctag == 0 && parent->status == syck_lvl_map && lvl->ncount == 0 ) {
