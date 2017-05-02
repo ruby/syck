@@ -1,3 +1,10 @@
+=== 1.3.0 / 2017-05-02
+
+Compatibility Changes:
+
+  * Removed `YAML::EngineManager`. It's not working after Ruby 2.2.
+    We completely gave up to support it.
+
 === 1.2.0 / 2016-11-12
 
 Bug fixes:
