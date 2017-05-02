@@ -7,16 +7,13 @@
 #
 
 require 'yaml/syck'
-if defined?(YAML::ENGINE)
-    require File.expand_path('../yaml/engine_manager', __FILE__)
-else
-    Object.class_eval <<-eorb, __FILE__, __LINE__ + 1
-        remove_const 'YAML' if defined? YAML
-        YAML = Syck
-        remove_method :to_yaml
-        alias :to_yaml :syck_to_yaml
-    eorb
-end
+
+Object.class_eval <<-eorb, __FILE__, __LINE__ + 1
+  remove_const 'YAML' if defined? YAML
+  YAML = Syck
+  remove_method :to_yaml
+  alias :to_yaml :syck_to_yaml
+eorb
 
 # == YAML
 #
@@ -453,5 +450,3 @@ module Kernel
     end
     private :y
 end
-
-
