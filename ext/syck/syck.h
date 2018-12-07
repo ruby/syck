@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "ruby/st.h"
+#include "ruby/ruby.h"
 
 #if defined(__cplusplus)
 extern "C" {
