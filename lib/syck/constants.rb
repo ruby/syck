@@ -6,7 +6,7 @@ module Syck
 	#
 	# Constants
 	#
-	VERSION = '1.0.5'
+	VERSION = '1.4.0'
 	SUPPORTED_YAML_VERSIONS = ['1.0']
 
 	#
