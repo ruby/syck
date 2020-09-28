@@ -23,7 +23,7 @@ typedef struct RVALUE {
 #endif
     struct RBasic  basic;
     struct RObject object;
-    struct RClass  klass;
+    /*struct RClass  klass;*/
     /*struct RFloat  flonum;*/
     /*struct RString string;*/
     struct RArray  array;
