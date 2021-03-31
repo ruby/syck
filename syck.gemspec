@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.extensions = ["ext/syck/extconf.rb"]
   s.files = Dir["[A-Z]*", "ext/**/*", "lib/**/*.rb", "test/**/*.rb"] - %w[Gemfile.lock]
-  s.extra_rdoc_files = ["CHANGELOG.rdoc", "README.rdoc", "CHANGELOG.rdoc", "README.rdoc"]
+  s.extra_rdoc_files = ["CHANGELOG.rdoc", "README.rdoc"]
   s.test_files = Dir["test/**/*.rb"]
   s.rdoc_options = ["--main", "README.rdoc"]
   s.required_ruby_version = Gem::Requirement.new(">= 2.0.0")
