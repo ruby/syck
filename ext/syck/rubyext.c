@@ -2231,6 +2231,7 @@ Init_syck()
      * Define YAML::Syck::Node class
      */
     cNode = rb_define_class_under( rb_syck, "Node", rb_cObject );
+    rb_undef_alloc_func(cNode);
     rb_undef( cNode, rb_intern("initialize_copy") );
     rb_define_attr( cNode, "emitter", 1, 1 );
     rb_define_attr( cNode, "resolver", 1, 1 );
