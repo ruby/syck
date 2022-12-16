@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.license = "MIT"
   s.require_paths = ["lib"]
   s.extensions = ["ext/syck/extconf.rb"]
-  s.files = Dir["[A-Z]*", "ext/**/*", "lib/**/*.rb", "test/**/*.rb"] - %w[Gemfile.lock]
+  s.files = Dir["[A-Z]*", "ext/**/*", "lib/**/*.rb", "test/**/*.rb"] - %w[Gemfile.lock ext/syck/gram.y]
   s.extra_rdoc_files = ["CHANGELOG.rdoc", "README.rdoc"]
   s.test_files = Dir["test/**/*.rb"]
   s.rdoc_options = ["--main", "README.rdoc"]
