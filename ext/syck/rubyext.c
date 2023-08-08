@@ -649,7 +649,7 @@ rb_syck_load_handler(SyckParser *p, SyckNode *n)
     /*
      * Create node,
      */
-    obj = rb_funcall( resolver, s_node_import, 1, Data_Wrap_Struct( cNode, NULL, NULL, n ) );
+    obj = rb_funcall( resolver, s_node_import, 1, Data_Wrap_Struct( cNode, syck_node_mark, NULL, n ) );
 
     /*
      * ID already set, let's alter the symbol table to accept the new object
