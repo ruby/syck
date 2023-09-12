@@ -15,7 +15,7 @@ module Syck
 class YAML_Unit_Tests < Test::Unit::TestCase
     # [ruby-core:34969]
     def test_regexp_with_n
-        assert_cycle(Regexp.new('',0,'n'))
+        assert_cycle(Regexp.new('', 0))
     end
 
 	#
