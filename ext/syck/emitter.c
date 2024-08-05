@@ -138,9 +138,10 @@ syck_new_emitter(void)
 }
 
 int
-syck_st_free_anchors( char *key, char *name, char *arg )
+syck_st_free_anchors( st_data_t key, st_data_t name, st_data_t arg )
 {
-    S_FREE( name );
+    char *name_as_ptr = (char *)name;
+    S_FREE( name_as_ptr );
     return ST_CONTINUE;
 }
 
