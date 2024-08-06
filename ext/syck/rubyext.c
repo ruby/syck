@@ -322,7 +322,7 @@ mktime_do(VALUE varg)
 }
 
 VALUE
-mktime_r(VALUE varg)
+mktime_r(VALUE varg, VALUE errinfo)
 {
     struct mktime_arg *arg = (struct mktime_arg *)varg;
 
@@ -351,7 +351,13 @@ rb_syck_mktime(const char *str, long len)
  * (see http://www.yaml.org/type/merge/)
  */
 VALUE
-syck_merge_i(VALUE entry, VALUE hsh )
+syck_merge_i(
+#ifdef RB_BLOCK_CALL_FUNC_ARGLIST
+    RB_BLOCK_CALL_FUNC_ARGLIST(entry, hsh)
+#else
+    VALUE entry, VALUE hsh
+#endif
+)
 {
     VALUE tmp;
     if ( !NIL_P(tmp = rb_check_convert_type(entry, T_HASH, "Hash", "to_hash")) )
@@ -733,9 +739,9 @@ syck_set_model(VALUE p, VALUE input, VALUE model)
 }
 
 static int
-syck_st_mark_nodes( char *key, SyckNode *n, char *arg )
+syck_st_mark_nodes( st_data_t key, st_data_t n, st_data_t arg )
 {
-    if ( n != (void *)1 ) syck_node_mark( n );
+    if ( n != 1 ) syck_node_mark( (SyckNode *)n );
     return ST_CONTINUE;
 }
 
@@ -1042,7 +1048,13 @@ syck_resolver_node_import(VALUE self, VALUE node)
  * Set instance variables
  */
 VALUE
-syck_set_ivars(VALUE vars, VALUE obj)
+syck_set_ivars(
+#ifdef RB_BLOCK_CALL_FUNC_ARGLIST
+    RB_BLOCK_CALL_FUNC_ARGLIST(vars, obj)
+#else
+    VALUE vars, VALUE obj
+#endif
+)
 {
     VALUE ivname = rb_ary_entry( vars, 0 );
     char *ivn;

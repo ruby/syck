@@ -201,10 +201,14 @@ syck_lookup_sym( SyckParser *p, SYMID id, void **datap )
 }
 
 int
-syck_st_free_nodes( char *key, SyckNode *n, char *arg )
+syck_st_free_nodes( st_data_t key, st_data_t n, st_data_t arg )
 {
-    if ( n != (void *)1 ) syck_free_node( n );
-    n = NULL;
+    if ( n != 1 ) syck_free_node( (SyckNode *)n );
+    /* Previously, this codde declared the `n` parameter as `SyckNode *`, and this
+     * code said `n = NULL`. That's obviously a no-op, and this code _probably_ should
+     * have said `*n = NULL`. However I'm terrified of actually changing Syck's behaviour
+     * at this juncture, so I'll just adjust the type of the assignment to 0 from NULL. */
+    n = 0;
     return ST_CONTINUE;
 }
 
@@ -238,10 +242,11 @@ typedef struct {
 } bytestring_t;
 
 int
-syck_st_free_syms( void *key, bytestring_t *sav, void *dummy )
+syck_st_free_syms( st_data_t key, st_data_t sav, st_data_t dummy )
 {
-    S_FREE(sav->buffer);
-    S_FREE(sav);
+    bytestring_t *sav_ptr = (bytestring_t *)sav;
+    S_FREE(sav_ptr->buffer);
+    S_FREE(sav_ptr);
     return ST_CONTINUE;
 }
 
