@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = "syck"
-  s.version = "1.5.1"
+  s.version = "1.5.1.1"
 
   s.summary = "A gemified version of Syck from Ruby's stdlib"
   s.description = "A gemified version of Syck from Ruby's stdlib.  Syck has been removed from\nRuby's stdlib, and this gem is meant to bridge the gap for people that haven't\nupdated their YAML yet."
