@@ -4,13 +4,14 @@
 
 == DESCRIPTION:
 
-This Gem is a wrapper around {Syck}[https://github.com/indeyets/syck] (a.k.a. Scripters' YAML Cobble-Yourself-a-Parser Kit),
-used for parsing YAML.
+This Gem is a wrapper around {Syck}[https://github.com/indeyets/syck] (a.k.a.
+Scripters' YAML Cobble-Yourself-a-Parser Kit), used for parsing YAML.
 
-Syck has been removed from Ruby's stdlib, and this gem is meant to bridge the gap for people that haven't
-updated their YAML yet.
+Syck has been removed from Ruby's stdlib, and this gem is meant to bridge the
+gap for people that haven't updated their YAML yet.
 
-If you are starting a new project, you probably should use {Psych}[https://github.com/ruby/psych] instead.
+If you are starting a new project, you probably should use
+{Psych}[https://github.com/ruby/psych] instead.
 
 == FEATURES/PROBLEMS:
 
