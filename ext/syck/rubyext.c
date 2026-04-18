@@ -770,7 +770,7 @@ rb_syck_bad_anchor_handler(SyckParser *p, char *a)
 {
     VALUE anchor_name = rb_str_new2( a );
     SyckNode *badanc = syck_new_map( rb_str_new2( "name" ), anchor_name );
-    badanc->type_id = syck_strndup( "tag:ruby.yaml.org,2002:object:YAML::Syck::BadAlias", 53 );
+    badanc->type_id = syck_strndup( "tag:ruby.yaml.org,2002:object:YAML::Syck::BadAlias", 50 );
     return badanc;
 }
 
