@@ -714,6 +714,7 @@ SYMID
 rb_syck_load_handler(SyckParser *p, SyckNode *n)
 {
     VALUE obj = Qnil;
+    VALUE node_wrapper;
     struct parser_xtra *bonus = (struct parser_xtra *)p->bonus;
     VALUE resolver = bonus->resolver;
     if ( NIL_P( resolver ) )
@@ -724,7 +725,17 @@ rb_syck_load_handler(SyckParser *p, SyckNode *n)
     /*
      * Create node,
      */
-    obj = rb_funcall( resolver, s_node_import, 1, TypedData_Wrap_Struct( cNode, &syck_node_type_nofree, n ) );
+    node_wrapper = TypedData_Wrap_Struct( cNode, &syck_node_type_nofree, n );
+    obj = rb_funcall( resolver, s_node_import, 1, node_wrapper );
+
+    /*
+     * syck_hdlr_add_node frees `n` as soon as we return (handler.c:25, when
+     * the node has no anchor). Ruby may still keep `node_wrapper` reachable
+     * via a conservative GC root on the machine stack, so the next GC would
+     * call syck_node_mark() with a dangling SyckNode*. Zero the wrapper's
+     * data pointer to make the mark a no-op. See ruby/syck#50.
+     */
+    DATA_PTR( node_wrapper ) = NULL;
 
     /*
      * ID already set, let's alter the symbol table to accept the new object
@@ -1482,6 +1493,7 @@ static void
 syck_node_mark(SyckNode *n)
 {
     int i;
+    if ( n == NULL ) return;
     rb_gc_mark_maybe( n->id );
     switch ( n->kind )
     {
