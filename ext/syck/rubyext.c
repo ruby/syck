@@ -75,7 +75,9 @@ void rb_syck_err_handler _((SyckParser *, const char *));
 SyckNode * rb_syck_bad_anchor_handler _((SyckParser *, char *));
 void rb_syck_output_handler _((SyckEmitter *, char *, long));
 void rb_syck_emitter_handler _((SyckEmitter *, st_data_t));
+#if defined(OBJ_TAINTED) && defined(OBJ_TAINT)
 int syck_parser_assign_io _((SyckParser *, VALUE *));
+#endif
 VALUE syck_scalar_alloc _((VALUE class));
 VALUE syck_seq_alloc _((VALUE class));
 VALUE syck_map_alloc _((VALUE class));
@@ -84,7 +86,9 @@ struct parser_xtra {
     VALUE data;  /* Borrowed this idea from marshal.c to fix [ruby-core:8067] problem */
     VALUE proc;
     VALUE resolver;
+#if defined(OBJ_TAINTED) && defined(OBJ_TAINT)
     int taint;
+#endif
 };
 
 struct emitter_xtra {
@@ -100,21 +104,22 @@ VALUE
 rb_syck_compile(VALUE self, VALUE port)
 {
     SYMID oid;
-    int taint;
     char *ret;
     VALUE bc;
     bytestring_t *sav = NULL;
     void *data = NULL;
 
     SyckParser *parser = syck_new_parser();
-    taint = syck_parser_assign_io(parser, &port);
+#if defined(OBJ_TAINTED) && defined(OBJ_TAINT)
+    int taint = syck_parser_assign_io(parser, &port);
+#endif
     syck_parser_handler( parser, syck_yaml2byte_handler );
     syck_parser_error_handler( parser, NULL );
     syck_parser_implicit_typing( parser, 0 );
     syck_parser_taguri_expansion( parser, 0 );
     oid = syck_parse( parser );
     if (!syck_lookup_sym( parser, oid, &data )) {
-	rb_raise(rb_eSyntaxError, "root node <%p> not found", (void *)oid);
+	    rb_raise(rb_eSyntaxError, "root node <%p> not found", (void *)oid);
     }
     sav = data;
 
@@ -126,7 +131,10 @@ rb_syck_compile(VALUE self, VALUE port)
     syck_free_parser( parser );
 
     bc = rb_str_new2( ret );
+
+#if defined(OBJ_TAINTED) && defined(OBJ_TAINT)
     if ( taint )      OBJ_TAINT( bc );
+#endif
     return bc;
 }
 
@@ -162,6 +170,7 @@ rb_syck_io_str_read( char *buf, SyckIoStr *str, long max_size, long skip )
     return len;
 }
 
+#if defined(OBJ_TAINTED) && defined(OBJ_TAINT)
 /*
  * determine: are we reading from a string or io?
  * (returns tainted? boolean)
@@ -188,6 +197,7 @@ syck_parser_assign_io(SyckParser *parser, VALUE *pport)
     *pport = port;
     return taint;
 }
+#endif
 
 /*
  * Get value in hash by key, forcing an empty hash if nil.
@@ -667,7 +677,9 @@ rb_syck_load_handler(SyckParser *p, SyckNode *n)
         obj = n->id;
     }
 
+#if defined(OBJ_TAINTED) && defined(OBJ_TAINT)
     if ( bonus->taint)      OBJ_TAINT( obj );
+#endif
     if ( bonus->proc != 0 ) rb_funcall(bonus->proc, s_call, 1, obj);
 
     rb_hash_aset(bonus->data, INT2FIX(RHASH_SIZE(bonus->data)), obj);
@@ -864,7 +876,9 @@ syck_parser_load(int argc, VALUE *argv, VALUE self)
     syck_set_model( self, input, model );
 
     bonus = (struct parser_xtra *)parser->bonus;
+#if defined(OBJ_TAINTED) && defined(OBJ_TAINT)
     bonus->taint = syck_parser_assign_io(parser, &port);
+#endif
     bonus->data = rb_hash_new();
     bonus->resolver = rb_attr_get( self, s_resolver );
     if ( NIL_P( proc ) ) bonus->proc = 0;
@@ -891,7 +905,9 @@ syck_parser_load_documents(int argc, VALUE *argv, VALUE self)
     syck_set_model( self, input, model );
 
     bonus = (struct parser_xtra *)parser->bonus;
+#if defined(OBJ_TAINTED) && defined(OBJ_TAINT)
     bonus->taint = syck_parser_assign_io(parser, &port);
+#endif
     bonus->resolver = rb_attr_get( self, s_resolver );
     bonus->proc = 0;
 
