@@ -151,6 +151,18 @@ static const rb_data_type_t syck_emitter_type = {
 };
 
 /*
+ * The taint API (OBJ_TAINT / OBJ_TAINTED) has also been removed from
+ * current Ruby, while older supported versions still provide it; shim
+ * it to a no-op where Ruby no longer defines it.
+ */
+#ifndef OBJ_TAINT
+#define OBJ_TAINT(obj) ((void)(obj))
+#endif
+#ifndef OBJ_TAINTED
+#define OBJ_TAINTED(obj) (0)
+#endif
+
+/*
  * Convert YAML to bytecode
  */
 VALUE
