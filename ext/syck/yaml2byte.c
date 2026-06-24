@@ -115,9 +115,7 @@ void bytestring_extend(bytestring_t *str, bytestring_t *ext)
 
 /* convert SyckNode into yamlbyte_buffer_t objects */
 SYMID
-syck_yaml2byte_handler(p, n)
-    SyckParser *p;
-    SyckNode *n;
+syck_yaml2byte_handler(SyckParser *p, SyckNode *n)
 {
     SYMID oid;
     long i;
